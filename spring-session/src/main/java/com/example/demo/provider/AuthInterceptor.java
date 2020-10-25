@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.provider;
 
+import com.example.demo.exception.CustomAuthenticationException;
+import com.example.demo.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         System.out.println(request.getSession());
 
-        return true;
+        //TODO: 클린코드.
+        if(request.getSession().getAttribute("role") != null && request.getSession().getAttribute("role").equals("member")) {
+            return true;
+        } else {
+            throw new CustomAuthenticationException(ErrorCode.AUTHENTICATION_FAILED.getMessage());
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.provider;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,13 +9,9 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 public class LoginService {
 
-    public boolean login(String id, String password, HttpSession httpSession) {
+    public boolean login(String id, String password) {
 
         //TODO: 로그인 연동
-
-        httpSession.setAttribute("role", "member");
-
-        //TODO: Session... 인증 정보 저장..
 
         return true;
     }

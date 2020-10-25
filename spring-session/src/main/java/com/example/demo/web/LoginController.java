@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.web;
 
+import com.example.demo.provider.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +18,13 @@ public class LoginController {
     @GetMapping
     public String login(HttpSession httpSession) {
 
-        loginService.login("id", "password", httpSession);
+        loginService.login("id", "password");
+
+
+        httpSession.setAttribute("role", "member");
+        //TODO: Session... 인증 정보 저장..
+
 
         return "ok";
     }
-
 }
