@@ -1,1 +1,1 @@
-INSERT INTO USER (ID, USERNAME, PASSWORD, FIRSTNAME, LASTNAME, EMAIL, ROLE) VALUES (1, 'sieunkr', '$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC', 'eddy', 'kim', 'sieunkr@gmail.com', 'ROLE_USER');
+INSERT INTO USER (ID, USERNAME, PASSWORD, EMAIL, ROLE) VALUES (1, 'eddy', '$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC', 'sieunkr@gmail.com', 'ROLE_USER');

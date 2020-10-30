@@ -34,8 +34,8 @@ public class LoginService implements LoginUseCase {
 
         //로그인 성공했다고 가정하고..
         MemberDTO memberDTO = MemberDTO.builder()
-                .firstName("eddy")
-                .lastName("kim")
+                .userName("eddy")
+                .email("sieunkr@gmail.com")
                 .role(Role.USER)
                 .build();
 

@@ -9,19 +9,15 @@ import lombok.Getter;
 public class MemberDTO {
 
     private String id;
-    private String firstName;
-    private String lastName;
+    private String userName;
+    private String email;
     private Role role;
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
-    }
 
     public static MemberDTO of(User user) {
         return MemberDTO.builder()
                 .id(String.valueOf(user.getId()))
-                .firstName(user.getFirstname())
-                .lastName(user.getLastname())
+                .userName(user.getUsername())
+                .email(user.getEmail())
                 //.role(user.getRole())
                 .build();
     }
