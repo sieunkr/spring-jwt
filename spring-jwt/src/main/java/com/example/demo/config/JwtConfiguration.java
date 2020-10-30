@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.provider.JwtProvider;
+import com.example.demo.provider.JwtAuthTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ public class JwtConfiguration {
     private String secret;
 
     @Bean
-    public JwtProvider jwtProvider() {
-        return new JwtProvider(secret);
+    public JwtAuthTokenProvider jwtProvider() {
+        return new JwtAuthTokenProvider(secret);
     }
 }

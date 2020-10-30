@@ -1,5 +1,6 @@
 package com.example.demo.provider;
 
+import com.example.demo.core.AuthTokenProvider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class JwtProvider implements AuthTokenProvider<Claims> {
+public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
 
     private final Key key;
 
-    public JwtProvider(String secret) {
+    public JwtAuthTokenProvider(String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
@@ -24,10 +25,10 @@ public class JwtProvider implements AuthTokenProvider<Claims> {
     }
 
     @Override
-    public Optional<String> createToken(String id, List<String> roles, Date expiredDate) {
+    public Optional<String> createToken(String id, String role, Date expiredDate) {
         var token = Jwts.builder()
                 .setSubject(id)
-                .claim("roles", roles)
+                .claim("role", role)
                 .claim("test", "test")
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiredDate)

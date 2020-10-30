@@ -1,20 +1,32 @@
 package com.example.demo.provider;
 
-import com.example.demo.provider.JwtProvider;
+import com.example.demo.core.LoginUseCase;
+import com.example.demo.core.MemberDTO;
+import com.example.demo.core.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class LoginService implements LoginUseCase {
 
-    private final JwtProvider jwtProvider;
+    private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
-    public boolean login(String id, String password) {
+    public Optional<MemberDTO> login(String id, String password) {
 
         //TODO: 로그인 연동
 
         //jwtProvider.createToken(id, Arrays.asList("ADMIN", "A"), new Date());
-        return true;
+
+        //로그인 성공했다고 가정하고..
+        MemberDTO memberDTO = MemberDTO.builder()
+                .firstName("eddy")
+                .lastName("kim")
+                .role(Role.USER)
+                .build();
+
+        return Optional.ofNullable(memberDTO);
     }
 }

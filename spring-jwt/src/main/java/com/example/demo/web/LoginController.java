@@ -1,10 +1,20 @@
 package com.example.demo.web;
 
+import com.example.demo.core.CommonResponse;
+import com.example.demo.core.MemberDTO;
+import com.example.demo.core.Role;
+import com.example.demo.exception.LoginFailedException;
+import com.example.demo.provider.JwtAuthTokenProvider;
 import com.example.demo.provider.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/login/v1")
@@ -12,13 +22,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final LoginService loginService;
+    private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
     @GetMapping
-    public String login() {
+    public CommonResponse login() {
 
-        loginService.login("id", "password");
+        Optional<MemberDTO> optionalMemberDTO = loginService.login("id", "password");
 
-        return "ok";
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(30);
+        Date expiredDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        Optional<String> optionalAuthToken = jwtAuthTokenProvider.createToken("id", Role.USER.name(), expiredDate);
+
+        if (optionalMemberDTO.isPresent() & optionalAuthToken.isPresent()) {
+
+            return CommonResponse.builder()
+                    .code("LOGIN_SUCCESS")
+                    .status(200)
+                    .message(optionalAuthToken.get())
+                    .build();
+        } else {
+            throw new LoginFailedException();
+        }
     }
-
 }
