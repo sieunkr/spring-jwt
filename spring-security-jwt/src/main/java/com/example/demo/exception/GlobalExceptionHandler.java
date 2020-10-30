@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     protected ResponseEntity<CommonResponse> handleBadCredentialsException(BadCredentialsException e) {
 
-        log.info("handleRuntimeException", e);
+        log.info("handleBadCredentialsException", e);
 
         CommonResponse response = CommonResponse.builder()
                 .code(ErrorCode.Login_FAILED.getCode())

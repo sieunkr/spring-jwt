@@ -1,6 +1,6 @@
 package com.example.demo.core;
 
-import com.example.demo.core.entity.User;
+import com.example.demo.core.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,11 +13,11 @@ public class MemberDTO {
     private String email;
     private Role role;
 
-    public static MemberDTO of(User user) {
+    public static MemberDTO of(Member member) {
         return MemberDTO.builder()
-                .id(String.valueOf(user.getId()))
-                .userName(user.getUsername())
-                .email(user.getEmail())
+                .id(String.valueOf(member.getId()))
+                .userName(member.getUsername())
+                .email(member.getEmail())
                 //.role(user.getRole())
                 .build();
     }

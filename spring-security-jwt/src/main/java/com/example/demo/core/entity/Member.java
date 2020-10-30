@@ -9,8 +9,8 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Entity
-@Table(name = "USER")
-public class User {
+@Table(name = "MEMBER")
+public class Member {
 
     @JsonIgnore
     @Id
