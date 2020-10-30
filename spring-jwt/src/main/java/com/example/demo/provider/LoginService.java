@@ -14,16 +14,14 @@ public class LoginService implements LoginUseCase {
 
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
-    public Optional<MemberDTO> login(String id, String password) {
+    public Optional<MemberDTO> login(String email, String password) {
 
         //TODO: 로그인 연동
 
-        //jwtProvider.createToken(id, Arrays.asList("ADMIN", "A"), new Date());
-
         //로그인 성공했다고 가정하고..
         MemberDTO memberDTO = MemberDTO.builder()
-                .firstName("eddy")
-                .lastName("kim")
+                .userName("eddy")
+                .email(email)
                 .role(Role.USER)
                 .build();
 

@@ -21,13 +21,13 @@ public class LoginService implements LoginUseCase {
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public Optional<MemberDTO> login(String id, String password) {
+    public Optional<MemberDTO> login(String email, String password) {
 
         //TODO: 로그인 연동
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 //new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-                new UsernamePasswordAuthenticationToken("sieunkr@gmail.com", "password");
+                new UsernamePasswordAuthenticationToken(email, password);
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

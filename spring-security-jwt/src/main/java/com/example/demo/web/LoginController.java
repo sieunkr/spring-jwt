@@ -6,10 +6,9 @@ import com.example.demo.core.Role;
 import com.example.demo.exception.LoginFailedException;
 import com.example.demo.provider.JwtAuthTokenProvider;
 import com.example.demo.provider.LoginService;
+import com.example.demo.web.dto.LoginRequestDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,10 +23,10 @@ public class LoginController {
     private final LoginService loginService;
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
-    @GetMapping
-    public CommonResponse login() {
+    @PostMapping
+    public CommonResponse login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
-        Optional<MemberDTO> optionalMemberDTO = loginService.login("id", "password");
+        Optional<MemberDTO> optionalMemberDTO = loginService.login(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
 
         LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(30);
         Date expiredDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
