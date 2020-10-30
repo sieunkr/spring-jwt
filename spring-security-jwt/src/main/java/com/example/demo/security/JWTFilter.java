@@ -23,7 +23,7 @@ public class JWTFilter extends GenericFilterBean {
 
    private static final Logger LOG = LoggerFactory.getLogger(JWTFilter.class);
 
-   public static final String AUTHORIZATION_HEADER = "Authorization";
+   public static final String AUTHORIZATION_HEADER = "x-auth-token";
 
    private JwtAuthTokenProvider jwtAuthTokenProvider;
 
@@ -38,7 +38,7 @@ public class JWTFilter extends GenericFilterBean {
       String jwt = resolveToken(httpServletRequest);
       String requestURI = httpServletRequest.getRequestURI();
 
-      /*
+
       if (StringUtils.hasText(jwt) && jwtAuthTokenProvider.validateToken(jwt)) {
 
 
@@ -50,15 +50,13 @@ public class JWTFilter extends GenericFilterBean {
          LOG.debug("no valid JWT token found, uri: {}", requestURI);
       }
 
-       */
-
       filterChain.doFilter(servletRequest, servletResponse);
    }
 
    private String resolveToken(HttpServletRequest request) {
-      String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-      if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-         return bearerToken.substring(7);
+      String authToken = request.getHeader(AUTHORIZATION_HEADER);
+      if (StringUtils.hasText(authToken)) {
+         return authToken;
       }
       return null;
    }

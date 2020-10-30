@@ -27,7 +27,7 @@ public class LoginService implements LoginUseCase {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 //new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-                new UsernamePasswordAuthenticationToken("sieunkr", "admin");
+                new UsernamePasswordAuthenticationToken("sieunkr@gmail.com", "password");
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

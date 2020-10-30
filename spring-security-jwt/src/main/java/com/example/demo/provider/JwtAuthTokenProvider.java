@@ -5,15 +5,24 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
 
     private final Key key;
+    private static final String AUTHORITIES_KEY = "role";
 
     public JwtAuthTokenProvider(String base64Secret) {
         byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
@@ -50,5 +59,22 @@ public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
             //throw
         }
         return Optional.empty();
+    }
+
+    //TODO: 메서드 위치 변경
+    public Authentication getAuthentication(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+        User principal = new User(claims.getSubject(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 }
