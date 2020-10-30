@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-
     private final AuthInterceptor authInterceptor;
 
     @Override
@@ -19,5 +18,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/coffee/**")
                 .excludePathPatterns("/api/login/**");
     }
-
 }

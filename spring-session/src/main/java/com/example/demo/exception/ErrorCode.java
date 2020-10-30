@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    AUTHENTICATION_FAILED(401, "AUTH001", " AUTHENTICATION_FAILED.");
+    AUTHENTICATION_FAILED(401, "AUTH001", " AUTHENTICATION_FAILED."),
+    Login_FAILED(401, "AUTH002", " Login_FAILED.");
 
     private final String code;
     private final String message;
