@@ -1,3 +1,6 @@
 
+
 jwt:
   secret: youcantrevealthesecretkey1234012300040
+server:
+  port: 8080

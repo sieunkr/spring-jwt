@@ -10,17 +10,19 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.example.demo.core.SecurityConstants.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         log.info("preHandle!!");
-        if(request.getSession().getAttribute("role") != null && request.getSession().getAttribute("role").equals(Role.USER.name())) {
+
+        if (request.getSession().getAttribute(KEY_ROLE) != null && request.getSession().getAttribute(KEY_ROLE).equals(Role.USER.name())) {
             return true;
         } else {
             throw new CustomAuthenticationException();

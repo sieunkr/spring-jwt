@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/coffee/v1")
+@RequestMapping("/api/v1/coffees")
 @RequiredArgsConstructor
 public class CoffeeController {
 
@@ -22,6 +22,11 @@ public class CoffeeController {
 
     @GetMapping
     public List<CoffeeDTO> getAllCoffees(HttpSession session) {
+
+        log.info(session.getId());
+        log.info(String.valueOf(session.getAttribute("email")));
+        log.info(String.valueOf(session.getAttribute("role")));
+
         return coffeeService.findAll().orElse(Collections.emptyList());
     }
 }

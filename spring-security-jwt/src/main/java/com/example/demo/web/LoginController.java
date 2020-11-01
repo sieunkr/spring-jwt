@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/login/v1")
+@RequestMapping("/api/v1/login")
 @RequiredArgsConstructor
 public class LoginController {
 

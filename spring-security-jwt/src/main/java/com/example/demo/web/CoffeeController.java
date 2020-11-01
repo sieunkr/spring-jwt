@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/coffee/v1")
+@RequestMapping("/api/v1/coffees")
 @RequiredArgsConstructor
 public class CoffeeController {
 

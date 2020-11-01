@@ -1,19 +1,19 @@
 package com.example.demo.web;
 
 import com.example.demo.core.MemberDTO;
-import com.example.demo.exception.CustomAuthenticationException;
 import com.example.demo.exception.LoginFailedException;
 import com.example.demo.provider.LoginService;
 import com.example.demo.web.dto.LoginRequestDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+import static com.example.demo.core.SecurityConstants.*;
+
 @RestController
-@RequestMapping("/api/login/v1")
+@RequestMapping("/api/v1/login")
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -23,10 +23,11 @@ public class LoginController {
     public String login(HttpSession httpSession, @RequestBody LoginRequestDTO loginRequestDTO) {
 
 
-        Optional<MemberDTO> optionalMember = loginService.login(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+        var optionalMember = loginService.login(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
 
         if(optionalMember.isPresent()) {
-            httpSession.setAttribute("role", optionalMember.get().getRole().name());
+            httpSession.setAttribute(KEY_ROLE, optionalMember.get().getRole().name());
+            httpSession.setAttribute("email", optionalMember.get().getEmail());
             httpSession.setMaxInactiveInterval(1800);
         } else {
             throw new LoginFailedException();
