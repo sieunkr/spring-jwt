@@ -47,6 +47,12 @@ public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
         } catch (UnsupportedJwtException e) {
             log.info("This is an authentication token that is not supported.: {}", e);
             //throw
+        } catch (SecurityException e) {
+            log.info("...: {}", e);
+        } catch (MalformedJwtException e) {
+            log.info("...: {}", e);
+        } catch (IllegalArgumentException e) {
+            log.info("...: {}", e);
         }
         return Optional.empty();
     }

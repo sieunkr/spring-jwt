@@ -17,22 +17,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginService implements LoginUseCase {
 
-    private final JwtAuthTokenProvider jwtAuthTokenProvider;
-    private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public Optional<MemberDTO> login(String email, String password) {
 
-        //TODO: 로그인 연동
-
+        //사용자 비밀번호 체크
         UsernamePasswordAuthenticationToken authenticationToken =
-                //new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
                 new UsernamePasswordAuthenticationToken(email, password);
-
+        //패스워드가 일치하지 않는다면 해당 로직 수행하지 않고 throw 발생
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+
+        //로그인 성공하면 아래와 같이 스프링 시큐리티에 인증 객체 설정
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //로그인 성공했다고 가정하고..
         MemberDTO memberDTO = MemberDTO.builder()
                 .userName("eddy")
                 .email("sieunkr@gmail.com")

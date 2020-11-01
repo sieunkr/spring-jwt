@@ -23,9 +23,9 @@ public class CoffeeController {
     @GetMapping
     public List<CoffeeDTO> getAllCoffees(HttpSession session) {
 
-        log.info(session.getId());
-        log.info(String.valueOf(session.getAttribute("email")));
-        log.info(String.valueOf(session.getAttribute("role")));
+        log.info("세션 아이디:" + session.getId());
+        log.info("사용자 이메일 주소:" + String.valueOf(session.getAttribute("email")));
+        log.info("권한:" + String.valueOf(session.getAttribute("role")));
 
         return coffeeService.findAll().orElse(Collections.emptyList());
     }

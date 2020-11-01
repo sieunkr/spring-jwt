@@ -4,7 +4,9 @@ import com.example.demo.core.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -49,6 +51,34 @@ public class GlobalExceptionHandler {
                 .code(ErrorCode.Login_FAILED.getCode())
                 .message(e.getMessage())
                 .status(ErrorCode.Login_FAILED.getStatus())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<CommonResponse> handleAccessDeniedException(AccessDeniedException e) {
+
+        log.info("handleAccessDeniedException", e);
+
+        CommonResponse response = CommonResponse.builder()
+                .code(ErrorCode.ACCESS_DENIED.getCode())
+                .message(e.getMessage())
+                .status(ErrorCode.ACCESS_DENIED.getStatus())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InsufficientAuthenticationException.class)
+    protected ResponseEntity<CommonResponse> handleInsufficientAuthenticationException(InsufficientAuthenticationException e) {
+
+        log.info("handleInsufficientAuthenticationException", e);
+
+        CommonResponse response = CommonResponse.builder()
+                .code(ErrorCode.AUTHENTICATION_FAILED.getCode())
+                .message(e.getMessage())
+                .status(ErrorCode.AUTHENTICATION_FAILED.getStatus())
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);

@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import com.example.demo.exception.JwtAccessDeniedHandler;
+import com.example.demo.exception.JwtAuthenticationEntryPoint;
 import com.example.demo.provider.JwtAuthTokenProvider;
 import com.example.demo.security.JWTConfigurer;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,8 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
-    //private final JwtAuthenticationEntryPoint authenticationErrorHandler;
-    //private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint authenticationErrorHandler;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -35,8 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 .exceptionHandling()
-                //.authenticationEntryPoint(authenticationErrorHandler)
-                //.accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(authenticationErrorHandler)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 .and()
                 .headers()
