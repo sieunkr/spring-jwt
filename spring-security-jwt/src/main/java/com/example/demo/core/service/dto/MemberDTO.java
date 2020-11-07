@@ -1,5 +1,6 @@
-package com.example.demo.core;
+package com.example.demo.core.service.dto;
 
+import com.example.demo.core.security.Role;
 import com.example.demo.core.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class MemberDTO {
                 .id(String.valueOf(member.getId()))
                 .userName(member.getUsername())
                 .email(member.getEmail())
-                //.role(user.getRole())
+                .role(Role.of(member.getRole()))
                 .build();
     }
 }

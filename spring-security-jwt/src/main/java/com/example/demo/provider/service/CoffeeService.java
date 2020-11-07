@@ -1,7 +1,7 @@
-package com.example.demo.provider;
+package com.example.demo.provider.service;
 
-import com.example.demo.core.CoffeeDTO;
-import com.example.demo.core.CoffeeUseCase;
+import com.example.demo.core.service.dto.CoffeeDTO;
+import com.example.demo.core.service.CoffeeUseCase;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;

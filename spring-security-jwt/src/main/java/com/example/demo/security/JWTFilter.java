@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
-import com.example.demo.provider.JwtAuthTokenProvider;
+import com.example.demo.provider.security.JwtAuthToken;
+import com.example.demo.provider.security.JwtAuthTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,13 +34,13 @@ public class JWTFilter extends GenericFilterBean {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
       Optional<String> token = resolveToken(httpServletRequest);
 
-      if (token.isPresent() && jwtAuthTokenProvider.validateToken(token.get())) {
+      if (token.isPresent()) {
+         JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
 
-         Authentication authentication = jwtAuthTokenProvider.getAuthentication(token.get());
-         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-      } else {
-         log.info("");
+         if(jwtAuthToken.validate()) {
+            Authentication authentication = jwtAuthTokenProvider.getAuthentication(jwtAuthToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+         }
       }
 
       filterChain.doFilter(servletRequest, servletResponse);

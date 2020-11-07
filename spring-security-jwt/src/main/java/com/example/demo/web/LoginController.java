@@ -1,11 +1,11 @@
 package com.example.demo.web;
 
 import com.example.demo.core.CommonResponse;
-import com.example.demo.core.MemberDTO;
+import com.example.demo.core.service.dto.MemberDTO;
 import com.example.demo.exception.LoginFailedException;
-import com.example.demo.exception.TokenValidFailedException;
-import com.example.demo.provider.JwtAuthTokenProvider;
-import com.example.demo.provider.LoginService;
+import com.example.demo.provider.security.JwtAuthToken;
+import com.example.demo.provider.security.JwtAuthTokenProvider;
+import com.example.demo.provider.service.LoginService;
 import com.example.demo.web.dto.LoginRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,6 @@ import java.util.Optional;
 public class LoginController {
 
     private final LoginService loginService;
-    private final JwtAuthTokenProvider jwtAuthTokenProvider;
-    private final static long LOGIN_RETENTION_MINUTES = 30;
 
     @PostMapping
     public CommonResponse login(@RequestBody LoginRequestDTO loginRequestDTO) {
@@ -31,18 +29,14 @@ public class LoginController {
 
         if (optionalMemberDTO.isPresent()) {
 
-            Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(LOGIN_RETENTION_MINUTES).atZone(ZoneId.systemDefault()).toInstant());
-            Optional<String> optionalAuthToken = jwtAuthTokenProvider.createToken(optionalMemberDTO.get().getEmail(), optionalMemberDTO.get().getRole().getCode(), expiredDate);
+            JwtAuthToken jwtAuthToken = (JwtAuthToken) loginService.createAuthToken(optionalMemberDTO.get());
 
-            if (optionalAuthToken.isPresent()) {
-                return CommonResponse.builder()
-                        .code("LOGIN_SUCCESS")
-                        .status(200)
-                        .message(optionalAuthToken.get())
-                        .build();
-            } else {
-                throw new TokenValidFailedException();
-            }
+            return CommonResponse.builder()
+                    .code("LOGIN_SUCCESS")
+                    .status(200)
+                    .message(jwtAuthToken.getToken())
+                    .build();
+
         } else {
             throw new LoginFailedException();
         }

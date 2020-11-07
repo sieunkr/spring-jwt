@@ -1,7 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.core.CoffeeDTO;
-import com.example.demo.provider.CoffeeService;
+import com.example.demo.core.service.dto.CoffeeDTO;
+import com.example.demo.provider.service.CoffeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

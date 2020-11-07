@@ -1,4 +1,4 @@
-package com.example.demo.core;
+package com.example.demo.core.repository;
 
 import com.example.demo.core.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

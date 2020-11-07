@@ -1,4 +1,4 @@
-package com.example.demo.core;
+package com.example.demo.core.service.dto;
 
 import lombok.Builder;
 import lombok.Getter;

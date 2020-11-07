@@ -1,6 +1,6 @@
-package com.example.demo.provider;
+package com.example.demo.provider.security;
 
-import com.example.demo.core.AuthTokenProvider;
+import com.example.demo.core.security.AuthTokenProvider;
 import com.example.demo.exception.TokenValidFailedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -16,11 +16,10 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
+public class JwtAuthTokenProvider implements AuthTokenProvider<JwtAuthToken> {
 
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
@@ -31,49 +30,28 @@ public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
     }
 
     @Override
-    public boolean validateToken(String token) {
-        return getData(token).isPresent();
+    public JwtAuthToken createAuthToken(String id, String role, Date expiredDate) {
+        return new JwtAuthToken(id, role, expiredDate, key);
     }
 
     @Override
-    public Optional<String> createToken(String id, String role, Date expiredDate) {
-        var token = Jwts.builder()
-                .setSubject(id)
-                .claim("role", role)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setExpiration(expiredDate)
-                .compact();
-
-        return Optional.ofNullable(token);
+    public JwtAuthToken convertAuthToken(String token) {
+        return new JwtAuthToken(token, key);
     }
 
     @Override
-    public Optional<Claims> getData(String token) {
-        try {
-            return Optional.of(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody());
-        } catch (ExpiredJwtException e) {
-            log.info("The authentication token has expired.: {}", e);
-            //throw
-        } catch (UnsupportedJwtException e) {
-            log.info("This is an authentication token that is not supported.: {}", e);
-            //throw
-        }
-        return Optional.empty();
-    }
+    public Authentication getAuthentication(JwtAuthToken authToken) {
 
-    //TODO: 메서드 위치 변경
-    public Authentication getAuthentication(String token) {
+        if(authToken.validate()) {
 
-        if(getData(token).isPresent()) {
-            Claims claims = getData(token).get();
-
+            Claims claims = authToken.getData();
             Collection<? extends GrantedAuthority> authorities =
                     Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
             User principal = new User(claims.getSubject(), "", authorities);
-            return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+            return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
 
         } else {
             throw new TokenValidFailedException();

@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.provider.AuthInterceptor;
+import com.example.demo.provider.security.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

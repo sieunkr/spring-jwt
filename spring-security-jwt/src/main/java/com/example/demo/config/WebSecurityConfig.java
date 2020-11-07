@@ -1,14 +1,13 @@
 package com.example.demo.config;
 
-import com.example.demo.core.Role;
+import com.example.demo.core.security.Role;
 import com.example.demo.exception.JwtAccessDeniedHandler;
 import com.example.demo.exception.JwtAuthenticationEntryPoint;
-import com.example.demo.provider.JwtAuthTokenProvider;
+import com.example.demo.provider.security.JwtAuthTokenProvider;
 import com.example.demo.security.JWTConfigurer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,8 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor

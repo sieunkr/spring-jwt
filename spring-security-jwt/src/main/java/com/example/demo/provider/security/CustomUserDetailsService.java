@@ -1,6 +1,6 @@
-package com.example.demo.provider;
+package com.example.demo.provider.security;
 
-import com.example.demo.core.MemberRepository;
+import com.example.demo.core.repository.MemberRepository;
 import com.example.demo.core.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;

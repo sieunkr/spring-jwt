@@ -1,4 +1,6 @@
-package com.example.demo.core;
+package com.example.demo.core.service;
+
+import com.example.demo.core.service.dto.CoffeeDTO;
 
 import java.util.List;
 import java.util.Optional;

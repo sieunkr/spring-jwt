@@ -1,5 +1,6 @@
-package com.example.demo.core;
+package com.example.demo.core.service.dto;
 
+import com.example.demo.core.security.Role;
 import lombok.Builder;
 import lombok.Getter;
 

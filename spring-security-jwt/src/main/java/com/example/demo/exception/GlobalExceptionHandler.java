@@ -14,6 +14,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(RuntimeException.class)
+    protected ResponseEntity<CommonResponse> handleRuntimeException(RuntimeException e) {
+
+        log.info("handleRuntimeException", e);
+
+        CommonResponse response = CommonResponse.builder()
+                .code("test")
+                .message(e.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(CustomAuthenticationException.class)
     protected ResponseEntity<CommonResponse> handleCustomAuthenticationException(CustomAuthenticationException e) {
 
@@ -63,7 +77,7 @@ public class GlobalExceptionHandler {
 
         CommonResponse response = CommonResponse.builder()
                 .code(ErrorCode.ACCESS_DENIED.getCode())
-                .message(e.getMessage())
+                .message(ErrorCode.ACCESS_DENIED.getMessage())
                 .status(ErrorCode.ACCESS_DENIED.getStatus())
                 .build();
 
@@ -77,7 +91,7 @@ public class GlobalExceptionHandler {
 
         CommonResponse response = CommonResponse.builder()
                 .code(ErrorCode.AUTHENTICATION_FAILED.getCode())
-                .message(e.getMessage())
+                .message(ErrorCode.AUTHENTICATION_FAILED.getMessage())
                 .status(ErrorCode.AUTHENTICATION_FAILED.getStatus())
                 .build();
 
