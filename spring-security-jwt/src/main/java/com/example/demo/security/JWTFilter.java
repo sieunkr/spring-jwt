@@ -1,8 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.provider.JwtAuthTokenProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -14,46 +13,44 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Optional;
 
+@Slf4j
 public class JWTFilter extends GenericFilterBean {
 
-   private static final Logger LOG = LoggerFactory.getLogger(JWTFilter.class);
-
-   public static final String AUTHORIZATION_HEADER = "x-auth-token";
+   private static final String AUTHORIZATION_HEADER = "x-auth-token";
 
    private JwtAuthTokenProvider jwtAuthTokenProvider;
 
-   public JWTFilter(JwtAuthTokenProvider jwtAuthTokenProvider) {
+   JWTFilter(JwtAuthTokenProvider jwtAuthTokenProvider) {
       this.jwtAuthTokenProvider = jwtAuthTokenProvider;
    }
 
    @Override
    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
       throws IOException, ServletException {
+
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-      String jwt = resolveToken(httpServletRequest);
-      String requestURI = httpServletRequest.getRequestURI();
+      Optional<String> token = resolveToken(httpServletRequest);
 
+      if (token.isPresent() && jwtAuthTokenProvider.validateToken(token.get())) {
 
-      if (StringUtils.hasText(jwt) && jwtAuthTokenProvider.validateToken(jwt)) {
-
-
-         Authentication authentication = jwtAuthTokenProvider.getAuthentication(jwt);
+         Authentication authentication = jwtAuthTokenProvider.getAuthentication(token.get());
          SecurityContextHolder.getContext().setAuthentication(authentication);
 
-         LOG.debug("set Authentication to security context for '{}', uri: {}", authentication.getName(), requestURI);
       } else {
-         LOG.debug("no valid JWT token found, uri: {}", requestURI);
+         log.info("");
       }
 
       filterChain.doFilter(servletRequest, servletResponse);
    }
 
-   private String resolveToken(HttpServletRequest request) {
+   private Optional<String> resolveToken(HttpServletRequest request) {
       String authToken = request.getHeader(AUTHORIZATION_HEADER);
       if (StringUtils.hasText(authToken)) {
-         return authToken;
+         return Optional.of(authToken);
+      } else {
+         return Optional.empty();
       }
-      return null;
    }
 }

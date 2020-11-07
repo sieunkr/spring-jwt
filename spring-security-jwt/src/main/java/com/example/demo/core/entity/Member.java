@@ -30,7 +30,7 @@ public class Member {
     @Size(min = 4, max = 100)
     private String password;
 
-    @Column(name = "EMAIL", length = 50)
+    @Column(name = "EMAIL", length = 50, unique = true)
     @NotNull
     @Size(min = 4, max = 50)
     private String email;

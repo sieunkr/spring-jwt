@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.core.Role;
 import com.example.demo.exception.JwtAccessDeniedHandler;
 import com.example.demo.exception.JwtAuthenticationEntryPoint;
 import com.example.demo.provider.JwtAuthTokenProvider;
@@ -53,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/v1/login/**").permitAll()
 
-                .antMatchers("/api/v1/coffees/**").hasAuthority("USER")
+                .antMatchers("/api/v1/coffees/**").hasAnyAuthority(Role.USER.getCode())
                 .anyRequest().authenticated()
 
                 .and()

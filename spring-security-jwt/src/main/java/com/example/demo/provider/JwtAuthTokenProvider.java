@@ -1,6 +1,7 @@
 package com.example.demo.provider;
 
 import com.example.demo.core.AuthTokenProvider;
+import com.example.demo.exception.TokenValidFailedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -39,7 +40,6 @@ public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
         var token = Jwts.builder()
                 .setSubject(id)
                 .claim("role", role)
-                .claim("test", "test")
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiredDate)
                 .compact();
@@ -63,18 +63,20 @@ public class JwtAuthTokenProvider implements AuthTokenProvider<Claims> {
 
     //TODO: 메서드 위치 변경
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(token)
-                .getBody();
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        if(getData(token).isPresent()) {
+            Claims claims = getData(token).get();
 
-        User principal = new User(claims.getSubject(), "", authorities);
+            Collection<? extends GrantedAuthority> authorities =
+                    Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+            User principal = new User(claims.getSubject(), "", authorities);
+            return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+
+        } else {
+            throw new TokenValidFailedException();
+        }
     }
 }
