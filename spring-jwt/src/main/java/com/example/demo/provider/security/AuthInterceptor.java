@@ -1,5 +1,6 @@
 package com.example.demo.provider.security;
 
+import com.example.demo.core.security.Role;
 import com.example.demo.exception.CustomAuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import java.util.Optional;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
-
     private static final String AUTHORIZATION_HEADER = "x-auth-token";
 
     @Override
@@ -30,7 +30,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         if (token.isPresent()) {
             JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
-            if(jwtAuthToken.validate()) {
+            if(jwtAuthToken.validate() & Role.USER.getCode().equals(jwtAuthToken.getData().get("role"))) {
                 return true;
             }
             else {

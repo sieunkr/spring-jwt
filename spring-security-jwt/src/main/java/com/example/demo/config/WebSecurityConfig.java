@@ -66,11 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow anonymous resource requests
                 .antMatchers(
                         "/",
-                        "/*.html",
-                        "/favicon.ico",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
                         "/h2-console/**"
                 );
     }

@@ -2,6 +2,7 @@ package com.example.demo.provider.security;
 
 import com.example.demo.core.security.AuthToken;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,12 +38,16 @@ public class JwtAuthToken implements AuthToken<Claims> {
     public Claims getData() {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        } catch (SecurityException e) {
+            log.info("Invalid JWT signature.");
+        } catch (MalformedJwtException e) {
+            log.info("Invalid JWT token.");
         } catch (ExpiredJwtException e) {
-            log.info("The authentication token has expired.: {}", e);
-            //throw
+            log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
-            log.info("This is an authentication token that is not supported.: {}", e);
-            //throw
+            log.info("Unsupported JWT token.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT token compact of handler are invalid.");
         }
         return null;
     }

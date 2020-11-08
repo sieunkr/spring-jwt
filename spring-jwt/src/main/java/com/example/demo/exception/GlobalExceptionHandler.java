@@ -31,9 +31,23 @@ public class GlobalExceptionHandler {
         log.info("handleLoginFailedException", e);
 
         CommonResponse response = CommonResponse.builder()
-                .code(ErrorCode.Login_FAILED.getCode())
+                .code(ErrorCode.LOGIN_FAILED.getCode())
                 .message(e.getMessage())
-                .status(ErrorCode.Login_FAILED.getStatus())
+                .status(ErrorCode.LOGIN_FAILED.getStatus())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(CustomJwtRuntimeException.class)
+    protected ResponseEntity<CommonResponse> handleJwtException(CustomJwtRuntimeException e) {
+
+        log.info("handleJwtException", e);
+
+        CommonResponse response = CommonResponse.builder()
+                .code(ErrorCode.INVALID_JWT_TOKEN.getCode())
+                .message(ErrorCode.INVALID_JWT_TOKEN.getMessage())
+                .status(ErrorCode.INVALID_JWT_TOKEN.getStatus())
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
